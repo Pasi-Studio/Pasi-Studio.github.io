@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Pasi&#39;s Studio</title>
+  
+  <subtitle>Miao miao miao ~~ ???</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://pasi.cat/"/>
+  <updated>2019-05-15T03:57:59.537Z</updated>
+  <id>https://pasi.cat/</id>
+  
+  <author>
+    <name>Pasi</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ubuntu 18.04 AFP Server</title>
+    <link href="https://pasi.cat/2019/05/14/Ubuntu%20AFP%20Server.html"/>
+    <id>https://pasi.cat/2019/05/14/Ubuntu AFP Server.html</id>
+    <published>2019-05-13T16:32:59.000Z</published>
+    <updated>2019-05-15T03:57:59.537Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>由于之前上车了蜗牛星际的矿机，于是便想着使用它给我的黑苹果进行网络文件共享（AFP）同时还能使用Time Machine的时间机器的备份。<br>虽然黑群晖可以完美实现这一功能 但由于群晖存储硬盘文件系统的设计 使得日后在系统崩溃后无法方便的取出数据。此外我还有usb网络共享的需求（安卓手机通过usb连接蜗牛 给蜗牛提供网络 同时将蜗牛的两个千兆网卡作为lan 给其他设备供网）暂时不清楚使用黑群晖的虚拟机插件运行LEDE的效果<br>原本的解决方案是使用PVE虚拟机 同时运行LEDE Openmediavalut或者黑群 但是由于蜗牛的处理器是j1900 不支持vd-t，使得无法直通sata控制器至虚拟机 导致整体传输性能下降<br>所以 权衡再三 我决定采用最灵活的linux系统（ubuntu）来实现上述的所有功能。</p><blockquote><p>由于新版的ubuntu系统使用了gnome的桌面环境 使得之前可以直接在网络设置中可开启的 “与其他计算机共享”丧失，所以在此我使用Xubuntu系统。<br><img src="/2019/05/14/Ubuntu AFP Server/1753675983.png" alt="Network Share"></p></blockquote><h2 id="Netatalk的环境依赖"><a href="#Netatalk的环境依赖" class="headerlink" title="Netatalk的环境依赖"></a>Netatalk的环境依赖</h2><p>Netatalk 依赖于Berkely DB数据库 为了让远程磁盘也能使用Spotlight 这一macOS的全局搜索功能。ubuntu软件源中未自带 需要自行编译安装。<br>libgcrypt 编译需要。</p><h3 id="Berkely-DB数据库编译安装"><a href="#Berkely-DB数据库编译安装" class="headerlink" title="Berkely DB数据库编译安装"></a>Berkely DB数据库编译安装</h3><p>在Oracle下载Berkely DB源代码 [链接][2]<br>解压缩文件 <code>tar -xvf db-18.*</code><br>进入文件目录 <code>cd build_unix</code><br>使用默认设置生成Makefile <code>.../dist/configure</code><br>添加CXX支持，则需要配置后添加参数“–enalbe-cxx” 比如这样 <code>…/dist/configure --enable-cxx</code> (本操作不需要)<br>开始编译 <code>make</code><br>安装 <code>sudo make install</code><br>Berkely DB的默认安装路径为 /usr/local/BerkeleyDB.18.1<br><img src="/2019/05/14/Ubuntu AFP Server/1191828345.png" alt="Berkely DB"></p><h3 id="安装libgcrypt"><a href="#安装libgcrypt" class="headerlink" title="安装libgcrypt"></a>安装libgcrypt</h3><p>在ubuntu下可以直接通过apt安装 <code>sudo apt-get install libgcrypt11-dev</code><br>同时附上Centos/Redhat的安装 <code>sudo yum install libgcrypt11-dev</code></p><h2 id="编译安装Netatalk"><a href="#编译安装Netatalk" class="headerlink" title="编译安装Netatalk"></a>编译安装Netatalk</h2><p>下载Netatalk源码包 目前最新版本3.1.11<br><a href="https://sourceforge.net/projects/netatalk/files/netatalk/" target="_blank" rel="noopener">https://sourceforge.net/projects/netatalk/files/netatalk/</a></p><h3 id="编译-amp-安装"><a href="#编译-amp-安装" class="headerlink" title="编译&amp;安装"></a>编译&amp;安装</h3><pre><code>tar -xzvf netatalk-3.1.11.tar.gzcd netatalk-3.1.11./configure --with-init-style=debian-systemd --with-bdb=/usr/local/BerkeleyDB.18.1</code></pre><blockquote><p>Tip:由于之前安装的 Berkely DB 没有注册到系统 所以在生成编译文件的时候需要指定下 文件位置 <code>--with-bdb=/usr/local/BerkeleyDB.18.1</code><br>–with-init-style 针对不同的系统有不同的参数 具体如下<br>[redhat-sysv|redhat-systemd|suse-sysv|suse-systemd|gentoo-openrc|gentoo-systemd|netbsd|debian-sysv|debian-systemd|solaris|openrc|systemd]<br>由于我使用的是ubuntu是属于deb系 且我个人喜欢使用systemd 所以 <code>--with-init-style=debian-systemd</code><br>更多详细的设置可以在Netatalk的安装目录中通过 <code>./configure -h</code> 查看到更详细的配置</p></blockquote><p>开始编译 <code>make</code><br>安装 <code>sudo make install</code></p><h2 id="配置-Netatalk-afp-conf"><a href="#配置-Netatalk-afp-conf" class="headerlink" title="配置 Netatalk (afp.conf)"></a>配置 Netatalk (afp.conf)</h2><p><code>sudo nano /usr/local/etc/afp.conf</code><br><img src="/2019/05/14/Ubuntu AFP Server/1593102964.png" alt="afp.config"></p><h3 id="afp-conf-配置文件内容解析"><a href="#afp-conf-配置文件内容解析" class="headerlink" title="afp.conf 配置文件内容解析"></a>afp.conf 配置文件内容解析</h3><pre><code>[Global] mimic model = Xserve #这个是指定让机器在你Mac系统中显示的图标log level = default:warnlog file = /var/log/afpd.loghosts allow = 10.0.0.0/24 #允许访问的主机地址,根据需要自行修改hostname = Pasi #主机名，随你喜欢[Homes] basedir regex = /home #用户的Home目录 #由于我安装xubuntu的ssd容量较小 所以实际使用中未开启[NAS-FILES] path = /media/文件路径 #数据目录 time machine = yes  #TimeMachine 时光机的支持</code></pre><h2 id="Netatalk启动-amp-自启"><a href="#Netatalk启动-amp-自启" class="headerlink" title="Netatalk启动&amp;自启"></a>Netatalk启动&amp;自启</h2><p>到此Netatalk已可以正常使用 但默认不会自启动。</p><pre><code>systemctl start netatalk #启动netatalksystemctl enable netatalk #开机自启netatalk</code></pre><blockquote><p>根据在编译时使用的–with-init-style 参数是systemd还是sysv  设置启动&amp;自启的指令略有不同，此处以systemd为列</p></blockquote><h2 id="AFP共享的远程访问"><a href="#AFP共享的远程访问" class="headerlink" title="AFP共享的远程访问"></a>AFP共享的远程访问</h2><p>AFP共享不像samba一样 需要手动设置smbpasswd 直接使用系统内有用户的 账户和密码即可远程登陆。（root默认禁止）<br>在mac系统上 commed+k 打开连接窗口 输入afp服务器的ip地址即可<br><img src="/2019/05/14/Ubuntu AFP Server/2233939386.png" alt="AFP Share connect"></p><blockquote><p>Tip：本文未配置Avahi 所以afp服务器不能被mac系统自动发现</p></blockquote><h2 id="TimeMachine自动备份"><a href="#TimeMachine自动备份" class="headerlink" title="TimeMachine自动备份"></a>TimeMachine自动备份</h2><p><img src="/2019/05/14/Ubuntu AFP Server/854308809.png" alt="TimeMachine Backup"><br>经过测试可以完美使用 且运行良好。 </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;由于之前上车了蜗牛星际的矿机，于是便想着使用它给我的黑苹果进行网络文件共享（AFP）同时还能使用Time Machine的时间机器的备份。&lt;
+      
+    
+    </summary>
+    
+    
+      <category term="Ubuntu" scheme="https://pasi.cat/tags/Ubuntu/"/>
+    
+      <category term="Netatalk" scheme="https://pasi.cat/tags/Netatalk/"/>
+    
+      <category term="AFP" scheme="https://pasi.cat/tags/AFP/"/>
+    
+      <category term="macOS" scheme="https://pasi.cat/tags/macOS/"/>
+    
+  </entry>
+  
+</feed>
