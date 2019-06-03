@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+/**/
+:root{
+	--frameworkColorWhite:#FFFFFF;
+	--frameworkColorBlack:#202020;
+	--frameworkColorBlack020:rgba(32,32,32,0.2);
+	--frameworkColorBlack040:rgba(32,32,32,0.4);
+	--frameworkMaxVW:100vw;
+}
+html.frameworkDeviceMobile:root,
+html.frameworkBrowserSafari:root{
+	--frameworkMaxVW:100%;
+}
+@media(min-width:1600px){
+	:root{
+		--frameworkContainerWidth:1400px;
+	}
+}
+@media(max-width:1599px){
+	:root{
+		--frameworkContainerWidth:1100px;
+	}
+}
+@media(min-width:720px){
+	:root{
+		--frameworkAside:20px;
+	}
+}
+@media(max-width:719px){
+	:root{
+		--frameworkAside:10px;
+	}
+}
+
+/**/
+html:not(.frameworkDeviceMobile):not(.frameworkBrowserSafari) ::-webkit-scrollbar{
+	width:10px;
+	height:10px;
+}
+html:not(.frameworkDeviceMobile):not(.frameworkBrowserSafari) ::-webkit-scrollbar-thumb{
+	border:3px solid;
+	border-color:transparent;
+	background-color:var(--frameworkColorBlack020);
+	background-clip:padding-box;
+}
+html:not(.frameworkDeviceMobile):not(.frameworkBrowserSafari) ::-webkit-scrollbar-thumb:active{
+	background-color:var(--frameworkColorBlack040);
+}
+html:not(.frameworkDeviceMobile).frameworkBrowserSafari>body ::-webkit-scrollbar{
+	width:10px;
+	height:10px;
+}
+html:not(.frameworkDeviceMobile).frameworkBrowserSafari>body ::-webkit-scrollbar-thumb{
+	border:3px solid;
+	border-color:transparent;
+	background-color:var(--frameworkColorBlack020);
+	background-clip:padding-box;
+}
+html:not(.frameworkDeviceMobile).frameworkBrowserSafari>body ::-webkit-scrollbar-thumb:active{
+	background-color:var(--frameworkColorBlack040);
+}
+
+/**/
+html{
+	overflow-x:hidden;
+	overflow-y:scroll;
+	width:var(--frameworkMaxVW);
+	line-height:100%;
+	font-size:14px;
+	font-weight:normal;
+	font-family:"PingFang SC",DengXian,"Noto Sans CJK SC";
+	color:var(--frameworkColorBlack);
+	background-color:var(--frameworkColorWhite);
+	word-break:break-all;
+	text-rendering:optimizeLegibility;
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+	-webkit-tap-highlight-color:transparent;
+	-webkit-text-size-adjust:100%;
+	text-size-adjust:100%;
+	touch-action:manipulation;
+	touch-action:pan-x pan-y;
+	overscroll-behavior:none;
+	overscroll-behavior:contain;
+	-webkit-overflow-scrolling:touch;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	user-select:none;
+}
+body{
+	margin:0 auto;
+	width:calc(var(--frameworkMaxVW) - var(--frameworkAside)*2);
+	max-width:var(--frameworkContainerWidth);
+}
+body *,
+body ::before,
+body ::after{
+	box-sizing:border-box;
+	max-width:100%;
+	outline:unset;
+	vertical-align:middle;
+}

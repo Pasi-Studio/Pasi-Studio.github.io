@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://pasi.cat/"/>
-  <updated>2019-05-15T03:57:59.537Z</updated>
+  <updated>2019-05-20T15:32:18.609Z</updated>
   <id>https://pasi.cat/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>FRP内网穿透</title>
+    <link href="https://pasi.cat/2019/05/20/FRP%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F.html"/>
+    <id>https://pasi.cat/2019/05/20/FRP内网穿透.html</id>
+    <published>2019-05-20T15:21:11.000Z</published>
+    <updated>2019-05-20T15:32:18.609Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>将局域网内的主机穿透到公网，建议在没法取得外网端口映射权限时使用；我在学校内使用的手机热点 无法直接设置映射 故FRP为最佳选择。</p><p>偶然间与朋友说起 Minecraft ，不禁</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot; title=&quot;需求&quot;&gt;&lt;/a&gt;需求&lt;/h2&gt;&lt;p&gt;将局域网内的主机穿透到公网，建议在没法取得外网端口映射权限时使用；我在学校内使用的手机热点 无法直接设置映射 故FRP为最佳选择。&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="Ubuntu" scheme="https://pasi.cat/tags/Ubuntu/"/>
+    
+      <category term="FRP" scheme="https://pasi.cat/tags/FRP/"/>
+    
+      <category term="Minecraft" scheme="https://pasi.cat/tags/Minecraft/"/>
+    
+  </entry>
   
   <entry>
     <title>Ubuntu 18.04 AFP Server</title>

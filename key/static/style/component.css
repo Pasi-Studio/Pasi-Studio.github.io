@@ -1,0 +1,111 @@
+/**/
+.component{
+	overflow:hidden;
+	position:relative;
+	margin:auto;
+	max-width:100%;
+}
+.component img{
+	max-width:100%;
+	background-color:#F7F7F7;
+	vertical-align:middle;
+	pointer-events:none;
+}
+.component>img{
+	background-color:#DBDBDB;
+}
+.component>div{
+	overflow:hidden;
+	position:absolute;
+	top:0;
+	width:40%;
+}
+.component>span:first-of-type{
+	display:flex;
+	align-items:center;
+	position:absolute;
+	left:40%;
+	top:0;
+	bottom:0;
+	width:10px;
+	transform:translateX(-5px);
+	background-color:rgba(0,0,0,0.8);
+	transition:background-color 0.2s ease-in-out;
+	cursor:ew-resize;
+}
+.component>span:first-of-type.componentActive{
+	background-color:rgba(0,0,0,0);
+}
+.component>span:first-of-type:before{
+	content:"";
+	position:absolute;
+	left:4px;
+	width:2px;
+	height:7.5%;
+	min-height:16px;
+	border-radius:2px;
+	background-color:rgba(255,255,255,0.55);
+	box-shadow:0 2px 4px rgba(0,0,0,0.1),0 3px 0 -2px rgba(0,0,0,0.03);
+	transition:background-color 0.2s ease-in-out;
+}
+html:not(.componentDeviceMobile) .component>span:first-of-type:hover:before,
+.component>span:first-of-type.componentActive:before{
+	background-color:rgba(255,255,255,0.85);
+}
+.component>span:first-of-type:after{
+	content:attr(componentText);
+	display:table;
+	padding:4px;
+	transform:translateX(14px);
+	border-radius:1px;
+	line-height:100%;
+	font-size:14px;
+	font-weight:bold;
+	color:rgba(0,0,0,0.5);
+	white-space:nowrap;
+	writing-mode:vertical-lr;
+	background-color:rgba(255,255,255,0.8);
+	mix-blend-mode:luminosity;
+	box-shadow:0 2px 4px rgba(0,0,0,0.1),0 3px 0 -2px rgba(0,0,0,0.03);
+	-webkit-backdrop-filter:saturate(180%) blur(20px);
+	backdrop-filter:saturate(180%) blur(20px);
+	opacity:1;
+	transition:opacity 0.2s ease-in-out;
+	pointer-events:none;
+}
+.component>span:first-of-type.componentActive:after{
+	opacity:0;
+}
+.component>span:first-of-type+span{
+	position:absolute;
+	right:42px;
+	bottom:28px;
+	border-radius:0px;
+	padding-top:0.5px;
+    padding-right:1px;
+    padding-bottom:1px;
+    padding-left:1px;
+	line-height:100%;
+	font-weight:bold;
+	color:rgba(255,255,255,1);
+	background-color:rgba(255,255,255,1);
+	background-repeat:no-repeat;
+	box-shadow:0 1px 2px rgba(0,0,0,0.1),0 3px 0 -2px rgba(0,0,0,0.03);
+	-webkit-backdrop-filter:saturate(180%) blur(20px);
+	backdrop-filter:saturate(180%) blur(20px);
+	opacity:1;
+	transform:scale(1);
+	transition:box-shadow 0.2s ease-in-out,opacity 0.2s ease-in-out,transform 0.2s ease-in-out;
+	cursor:pointer;
+}
+html:not(.componentDeviceMobile) .component>span:first-of-type+span:hover,
+.component>span:first-of-type+span:active{
+	box-shadow:0 2px 4px rgba(0,0,0,0.1),0 3px 0 -2px rgba(0,0,0,0.03);
+}
+.component>span:first-of-type+span:active{
+	transform:scale(0.9);
+}
+.component>span:first-of-type.componentActive+span{
+	opacity:0;
+	pointer-events:none;
+}
